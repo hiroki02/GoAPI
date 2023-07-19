@@ -35,19 +35,9 @@ func Get(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	//db, err := sql.Open("postgres", "user=yamada-hi password='' host=localhost port=5432 dbname=lesson sslmode=disable")
-	//if err != nil {
-	//	return err
-	//}
-	//defer db.Close()
-	//if err := db.Ping(); err != nil {
-	//	return err
-	//}
 	var i postgres.Task
 	db := postgres.ConnectDB()
 	defer db.Close()
-	//err = db.QueryRow("SELECT * FROM task WHERE id = $1", req.ID).
-	//	Scan(&i.ID, &i.Title, &i.CreatedAt, &i.UpdatedAt)
 	err = db.QueryRow("SELECT * FROM task WHERE id = $1", req.ID).
 		Scan(&i.ID, &i.Title, &i.CreatedAt, &i.UpdatedAt)
 	if err != nil {
@@ -67,33 +57,6 @@ func Get(c echo.Context) error {
 }
 
 func List(c echo.Context) error {
-	//ctx := c.Request().Context()
-
-	//var i postgres.Task
-	//var j postgres.TaskList
-	//db := postgres.ConnectDB()
-	//defer db.Close()
-	//
-	//rows, err := db.Query("SELECT * FROM task")
-	//if err != nil {
-	//	return err
-	//}
-	//for rows.Next() {
-	//	rows.Scan(&i.ID, &i.Title, &i.UpdatedAt, &i.CreatedAt)
-	//	j = append(j, i)
-	//}
-
-	//res := make([]*response.Task, len(j))
-	//const layout2 = "2006/01/02 15:04:05"
-	//for x, v := range j {
-	//	responseGet := &response.Task{
-	//		ID:        v.ID,
-	//		Title:     v.Title,
-	//		CreatedAt: v.CreatedAt.Format(layout2),
-	//		UpdatedAt: v.UpdatedAt.Format(layout2),
-	//	}
-	//	res[x] = responseGet
-	//}
 
 	listTask, err := postgres.ListTask()
 	if err != nil {
@@ -102,4 +65,17 @@ func List(c echo.Context) error {
 	var list response.TaskList
 	list.TaskList = response.ToTaskList(listTask)
 	return c.JSON(http.StatusOK, list)
+}
+
+func Update(c echo.Context) error {
+	var req request.CreateTask
+	err := c.Bind(&req)
+	if err != nil {
+		return err
+	}
+	err = c.Validate(&req)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, req)
 }
