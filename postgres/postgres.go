@@ -16,7 +16,7 @@ type Task struct {
 }
 
 func ConnectDB() *sql.DB {
-	db, err := sql.Open("postgres", "user=User password='' host=localhost port=5432 dbname=lesson sslmode=disable")
+	db, err := sql.Open("postgres", "user=postgres password='hiro0201' host=localhost port=5432 dbname=lesson sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,5 +41,4 @@ func ListTask() (TaskList, error) {
 		tl = append(tl, t)
 	}
 	return tl, err
-
 }
