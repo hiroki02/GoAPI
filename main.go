@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -15,7 +14,6 @@ import (
 
 func main() {
 
-	fmt.Print("aaa")
 	e := echo.New()
 	e.Validator = &server.CustomValidator{Validator: validator.New()}
 	e.Use(middleware.Logger())
